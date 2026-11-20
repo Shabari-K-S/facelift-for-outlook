@@ -1,0 +1,635 @@
+/* ============================================================================
+   Relay for Outlook Web — Minimalist UI Redesign (Zen Browser / Firefox)
+   Targets stable ARIA roles, landmarks, and data attributes so updates don't
+   break the layout. Activated via html[data-relay-enabled="true"].
+   ============================================================================ */
+
+/* ---------- Design Tokens ---------- */
+html[data-relay-enabled="true"][data-relay-theme="dark"] {
+  --relay-bg-canvas: #0f1115;
+  --relay-bg-sidebar: #0b0d10;
+  --relay-bg-list: #13161b;
+  --relay-bg-elevated: #1a1e26;
+  --relay-bg-hover: #1e232c;
+  --relay-bg-selected: rgba(59, 130, 246, 0.14);
+  --relay-border: #232730;
+  --relay-border-strong: #323846;
+  --relay-text-primary: #f3f4f6;
+  --relay-text-secondary: #9ca3af;
+  --relay-text-muted: #6b7280;
+  --relay-accent: #3b82f6;
+  --relay-accent-hover: #2563eb;
+  --relay-danger: #ef4444;
+  color-scheme: dark;
+}
+
+html[data-relay-enabled="true"][data-relay-theme="light"] {
+  --relay-bg-canvas: #ffffff;
+  --relay-bg-sidebar: #f7f8fa;
+  --relay-bg-list: #fcfcfd;
+  --relay-bg-elevated: #f1f3f6;
+  --relay-bg-hover: #eef0f4;
+  --relay-bg-selected: #e8eefc;
+  --relay-border: #e5e7eb;
+  --relay-border-strong: #d1d5db;
+  --relay-text-primary: #111827;
+  --relay-text-secondary: #4b5563;
+  --relay-text-muted: #6b7280;
+  --relay-accent: #2563eb;
+  --relay-accent-hover: #1d4ed8;
+  --relay-danger: #dc2626;
+  color-scheme: light;
+}
+
+/* ---------- Base Typography & Scrollbars ---------- */
+html[data-relay-enabled="true"],
+html[data-relay-enabled="true"] body {
+  background-color: var(--relay-bg-canvas) !important;
+  color: var(--relay-text-primary) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html[data-relay-enabled="true"] * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--relay-border-strong) transparent;
+}
+
+/* Elements tagged dynamically by content.js MutationObserver */
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [data-relay-hidden="ai"],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [data-relay-hidden="ribbon"],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [data-relay-hidden="folder"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [data-relay-hidden="reading"],
+html[data-relay-enabled="true"] [data-relay-hidden="true"] {
+  display: none !important;
+}
+
+/* ---------- Override Outlook Fluent CSS Variables (including FluentProvider) ---------- */
+html[data-relay-enabled="true"] body,
+html[data-relay-enabled="true"] #app,
+html[data-relay-enabled="true"] #MainModule,
+html[data-relay-enabled="true"] [id="Skip to message-region"],
+html[data-relay-enabled="true"] #ReadingPaneContainerId,
+html[data-relay-enabled="true"] .fui-FluentProvider,
+html[data-relay-enabled="true"] [class*="FluentProvider"] {
+  --neutralLighterAlt: var(--relay-bg-canvas) !important;
+  --neutralLighter: var(--relay-bg-canvas) !important;
+  --neutralLight: var(--relay-bg-hover) !important;
+  --neutralQuaternaryAlt: var(--relay-border) !important;
+  --neutralQuaternary: var(--relay-border-strong) !important;
+  --neutralTertiaryAlt: var(--relay-border-strong) !important;
+  --neutralSecondary: var(--relay-text-secondary) !important;
+  --neutralPrimaryAlt: var(--relay-text-primary) !important;
+  --neutralPrimary: var(--relay-text-primary) !important;
+  --neutralDark: var(--relay-text-primary) !important;
+  --white: var(--relay-bg-canvas) !important;
+  --themePrimary: var(--relay-accent) !important;
+  --themeDarkAlt: var(--relay-accent-hover) !important;
+  --colorNeutralBackground1: var(--relay-bg-canvas) !important;
+  --colorNeutralBackground2: var(--relay-bg-canvas) !important;
+  --colorNeutralBackground3: var(--relay-bg-canvas) !important;
+  --colorNeutralBackground4: var(--relay-bg-canvas) !important;
+  --colorNeutralBackground5: var(--relay-bg-canvas) !important;
+  --colorNeutralBackground6: var(--relay-bg-canvas) !important;
+  --colorNeutralBackground1Hover: var(--relay-bg-hover) !important;
+  --colorNeutralBackground1Selected: var(--relay-bg-selected) !important;
+  --colorNeutralStroke1: var(--relay-border) !important;
+  --colorNeutralStroke2: var(--relay-border) !important;
+  --colorNeutralForeground1: var(--relay-text-primary) !important;
+  --colorNeutralForeground2: var(--relay-text-secondary) !important;
+  --colorNeutralForeground3: var(--relay-text-muted) !important;
+  --colorBrandBackground: var(--relay-accent) !important;
+  --colorBrandForeground1: var(--relay-accent) !important;
+}
+
+/* ---------- Top Header Bar (Clean, Slim, High-Contrast) ---------- */
+html[data-relay-enabled="true"] #O365_NavHeader,
+html[data-relay-enabled="true"] [id="O365_NavHeader"] {
+  background-color: var(--relay-bg-sidebar) !important;
+  border-bottom: 1px solid var(--relay-border) !important;
+  box-shadow: none !important;
+  height: 44px !important;
+  min-height: 44px !important;
+}
+
+html[data-relay-enabled="true"] #O365_NavHeader > div {
+  height: 44px !important;
+  background-color: transparent !important;
+}
+
+html[data-relay-enabled="true"] #O365_NavHeader button,
+html[data-relay-enabled="true"] #O365_NavHeader a {
+  background-color: transparent !important;
+  color: var(--relay-text-secondary) !important;
+}
+
+html[data-relay-enabled="true"] #O365_NavHeader button:hover {
+  background-color: var(--relay-bg-hover) !important;
+  color: var(--relay-text-primary) !important;
+  border-radius: 6px !important;
+}
+
+/* Clean search box in top header */
+html[data-relay-enabled="true"] #searchBoxColumnContainerId,
+html[data-relay-enabled="true"] [role="search"] {
+  background-color: var(--relay-bg-canvas) !important;
+  border: 1px solid var(--relay-border) !important;
+  border-radius: 7px !important;
+  box-shadow: none !important;
+  height: 30px !important;
+  min-height: 30px !important;
+}
+
+html[data-relay-enabled="true"] #searchBoxColumnContainerId:focus-within,
+html[data-relay-enabled="true"] [role="search"]:focus-within {
+  border-color: var(--relay-accent) !important;
+}
+
+html[data-relay-enabled="true"] #topSearchInput,
+html[data-relay-enabled="true"] [role="search"] input {
+  background-color: transparent !important;
+  color: var(--relay-text-primary) !important;
+  font-size: 12.5px !important;
+}
+
+/* ---------- Hide Copilot / AI / Ads / Promo Clutter ---------- */
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [aria-label*="Copilot" i],
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [title*="Copilot" i],
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [data-icon-name*="Copilot" i],
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] button[id*="copilot" i],
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [aria-label*="Draft with" i],
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [aria-label*="Summary by" i],
+html[data-relay-enabled="true"][data-relay-hide-ai="true"] [aria-label*="Coaching by" i],
+/* Hide noisy header icons (Meet Now, Teams, OneNote, My Day, Help, Tips, Ads) */
+html[data-relay-enabled="true"] #O365_MainLink_MeetNow,
+html[data-relay-enabled="true"] #O365_MainLink_Teams,
+html[data-relay-enabled="true"] #O365_MainLink_OneNote,
+html[data-relay-enabled="true"] #O365_MainLink_Todo,
+html[data-relay-enabled="true"] #O365_MainLink_Help,
+html[data-relay-enabled="true"] #O365_MainLink_Tips,
+html[data-relay-enabled="true"] [aria-label="Meet Now"],
+html[data-relay-enabled="true"] [aria-label="My Day"],
+html[data-relay-enabled="true"] [aria-label="OneNote feed"],
+html[data-relay-enabled="true"] [aria-label="Tips"],
+html[data-relay-enabled="true"] [aria-label*="Advertisement" i],
+html[data-relay-enabled="true"] [aria-label*="Go ad-free" i],
+html[data-relay-enabled="true"] [aria-label*="Upgrade to" i] {
+  display: none !important;
+}
+
+/* ---------- Hide Far-Left Microsoft 365 App Rail (Optional) ---------- */
+html[data-relay-enabled="true"][data-relay-hide-rail="true"] #LeftRail,
+html[data-relay-enabled="true"][data-relay-hide-rail="true"] [data-app-section="LeftRail"],
+html[data-relay-enabled="true"][data-relay-hide-rail="true"] [aria-label="Navigation bar"][role="region"],
+html[data-relay-enabled="true"][data-relay-hide-rail="true"] [aria-label="App bar"] {
+  display: none !important;
+}
+
+/* Focus Mode (press B): collapse folder pane for distraction-free triage */
+html[data-relay-enabled="true"][data-relay-focus-mode="true"] [data-app-section="NavigationPane"],
+html[data-relay-enabled="true"][data-relay-focus-mode="true"] [role="navigation"][aria-label*="Navigation" i] {
+  display: none !important;
+}
+
+/* ---------- Minimal Ribbon / Command Bar (Optional) ---------- */
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="tablist"][aria-label*="Ribbon" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [data-app-section="RibbonTabs"],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] #innerRibbonContainer > div:first-child:has([aria-label="File"]) {
+  display: none !important;
+}
+
+/* Keep the primary New Mail / Action toolbar slim & border-separated */
+html[data-relay-enabled="true"] [data-app-section="CommandBar"],
+html[data-relay-enabled="true"] [role="menubar"],
+html[data-relay-enabled="true"] #innerRibbonContainer [role="toolbar"] {
+  background-color: var(--relay-bg-sidebar) !important;
+  border-bottom: 1px solid var(--relay-border) !important;
+  box-shadow: none !important;
+}
+
+/* Trim noisy secondary toolbar buttons in BOTH menubar and toolbar */
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Sweep" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Quick steps" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Report" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Categorize" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Snooze" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Print" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Undo" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Rules" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="My Templates" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Viva" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Add-ins" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Apps" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Teams" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Flag" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [aria-label*="Ribbon" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [role="separator"],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [class*="divider" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="toolbar"] [class*="separator" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [role="separator"],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [class*="divider" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [class*="separator" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Sweep" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Quick steps" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Report" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Categorize" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Snooze" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Print" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Undo" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Viva" i],
+html[data-relay-enabled="true"][data-relay-hide-ribbon="true"] [role="menubar"] [aria-label*="Add-ins" i] {
+  display: none !important;
+}
+
+/* Crisp New Mail button */
+html[data-relay-enabled="true"] button[aria-label="New mail"],
+html[data-relay-enabled="true"] button[aria-label="New message"] {
+  background-color: var(--relay-accent) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  font-size: 12.5px !important;
+  box-shadow: none !important;
+}
+
+html[data-relay-enabled="true"] button[aria-label="New mail"]:hover,
+html[data-relay-enabled="true"] button[aria-label="New message"]:hover {
+  background-color: var(--relay-accent-hover) !important;
+}
+
+/* ---------- Left Folder Pane ---------- */
+html[data-relay-enabled="true"] [data-app-section="NavigationPane"],
+html[data-relay-enabled="true"] [role="navigation"][aria-label*="Navigation" i] {
+  background-color: var(--relay-bg-sidebar) !important;
+  border-right: 1px solid var(--relay-border) !important;
+}
+
+html[data-relay-enabled="true"] [role="treeitem"] {
+  border-radius: 6px !important;
+  margin: 1px 6px !important;
+  transition: background-color 100ms ease !important;
+}
+
+html[data-relay-enabled="true"] [role="treeitem"]:hover {
+  background-color: var(--relay-bg-hover) !important;
+}
+
+html[data-relay-enabled="true"] [role="treeitem"][aria-selected="true"] {
+  background-color: var(--relay-bg-elevated) !important;
+  color: var(--relay-text-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Clean Folder Sidebar: hide noisy system folders */
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="Conversation History" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="RSS" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="Notes" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="Sync Issues" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="Search Folders" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="Discover groups" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][title^="Go to Groups" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][aria-label^="Conversation History" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][aria-label^="RSS" i],
+html[data-relay-enabled="true"][data-relay-clean-folders="true"] [role="treeitem"][aria-label^="Notes" i] {
+  display: none !important;
+}
+
+/* ---------- Middle Message List Pane ---------- */
+html[data-relay-enabled="true"] [data-app-section="MessageList"],
+html[data-relay-enabled="true"] [aria-label="Message list"],
+html[data-relay-enabled="true"] [role="listbox"] {
+  background-color: var(--relay-bg-list) !important;
+  border-right: 1px solid var(--relay-border) !important;
+}
+
+/* Individual Email Rows */
+html[data-relay-enabled="true"] [role="listbox"] [role="option"] {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--relay-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  position: relative !important;
+  transition: background-color 80ms ease !important;
+}
+
+html[data-relay-enabled="true"] [role="listbox"] [role="option"]:hover {
+  background-color: var(--relay-bg-hover) !important;
+}
+
+html[data-relay-enabled="true"] [role="listbox"] [role="option"][aria-selected="true"],
+html[data-relay-enabled="true"] [role="listbox"] [role="option"].relay-kbd-focus {
+  background-color: var(--relay-bg-selected) !important;
+  outline: none !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-relay-enabled="true"] [role="listbox"] [role="option"][aria-selected="true"] > div,
+html[data-relay-enabled="true"] [role="listbox"] [role="option"]:focus,
+html[data-relay-enabled="true"] [role="listbox"] [role="option"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Expanded conversation (thread) rows & selected rows: Outlook paints grey/blue fills on
+   inner wrappers AND on the group wrapper around thread children, hiding the row's own
+   hover/selected tint. Make every non-row wrapper transparent so parent and child rows
+   share the same list surface. */
+html[data-relay-enabled="true"] [role="listbox"] :is(div, [role="group"], [role="presentation"]):not([role="option"]):not([role="img"]):not([role="img"] *):not([role="button"]):not([role="button"] *):not([role="checkbox"]):not([role="checkbox"] *) {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Selected row: drop Outlook's bright blue focus box (drawn via ::after / outline) */
+html[data-relay-enabled="true"] [role="listbox"] [role="option"][aria-selected="true"]::after,
+html[data-relay-enabled="true"] [role="listbox"] [role="option"]:focus-within::after {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+html[data-relay-enabled="true"] [role="listbox"] [role="option"][aria-selected="true"] div:not([role="checkbox"]):not([role="checkbox"] *) {
+  outline: none !important;
+  border-color: transparent !important;
+}
+
+/* Unread sender/subject: bold primary text instead of Outlook's brand blue */
+html[data-relay-enabled="true"] [role="listbox"] {
+  --colorBrandForeground1: var(--relay-text-primary) !important;
+  --colorBrandForeground2: var(--relay-text-primary) !important;
+  --colorCompoundBrandForeground1: var(--relay-text-primary) !important;
+}
+
+/* Neutral initials avatars (Outlook colours them per sender, e.g. brown "M") */
+html[data-relay-enabled="true"] [role="listbox"] :is(.fui-Avatar, .fui-Avatar__initials, [class*="Persona-initials"]),
+html[data-relay-enabled="true"] [data-relay-np="pane"] :is(.fui-Avatar, .fui-Avatar__initials, [class*="Persona-initials"]),
+html[data-relay-enabled="true"] #ReadingPaneContainerId :is(.fui-Avatar, .fui-Avatar__initials, [class*="Persona-initials"]) {
+  background-color: var(--relay-bg-elevated) !important;
+  color: var(--relay-text-secondary) !important;
+}
+
+/* Crisp 2.5px left accent bar on active/keyboard-focused row */
+html[data-relay-enabled="true"] [role="listbox"] [role="option"][aria-selected="true"]::before,
+html[data-relay-enabled="true"] [role="listbox"] [role="option"].relay-kbd-focus::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2.5px;
+  background-color: var(--relay-accent);
+  z-index: 2;
+}
+
+/* Compact Clean List: hide bulky row checkboxes until hover & unify header */
+html[data-relay-enabled="true"][data-relay-compact-list="true"] [aria-label="Message list"] > div:first-child {
+  background-color: var(--relay-bg-list) !important;
+  border-bottom: 1px solid var(--relay-border) !important;
+}
+
+html[data-relay-enabled="true"][data-relay-compact-list="true"] [role="listbox"] [role="option"] [role="checkbox"] {
+  opacity: 0;
+  transition: opacity 100ms ease;
+}
+
+html[data-relay-enabled="true"][data-relay-compact-list="true"] [role="listbox"] [role="option"]:hover [role="checkbox"],
+html[data-relay-enabled="true"][data-relay-compact-list="true"] [role="listbox"] [role="option"] [role="checkbox"][aria-checked="true"] {
+  opacity: 1;
+}
+
+/* Hide noisy emoji reaction counters inside message list rows (e.g. 👍 1) */
+html[data-relay-enabled="true"][data-relay-compact-list="true"] [role="listbox"] [role="option"] [aria-label*="reaction" i],
+html[data-relay-enabled="true"][data-relay-compact-list="true"] [role="listbox"] [role="option"] [title*="reaction" i] {
+  display: none !important;
+}
+
+/* ---------- Message region (outer surface) + Reading Pane (#ReadingPaneContainerId) ---------- */
+html[data-relay-enabled="true"] [id="Skip to message-region"],
+html[data-relay-enabled="true"] #ReadingPaneContainerId {
+  background: var(--relay-bg-canvas) !important;
+  background-color: var(--relay-bg-canvas) !important;
+  box-shadow: none !important;
+}
+
+/* Outlook sets an inline style="margin-left: 8px" on this container, which leaves a
+   mismatched strip between the message list and the pane; !important beats non-important inline styles.
+   The right side gets the same treatment so the pane sits flush on both edges. */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ItemReadingPaneContainer {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [id="Skip to message-region"] {
+  padding-right: 0 !important;
+}
+
+/* Inner reading wrapper carries inline style="margin: 0px 19px 0px 2px" (19px right gutter).
+   Hashed classes can change between Outlook builds, so the inline-style match is a fallback. */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId .lk6bE.THa4i,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId div[style*="margin: 0px 19px 0px 2px"] {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Unify every structural wrapper inside #ReadingPaneContainerId
+   (leaves HTML email body content, buttons, avatars, and status chips untouched) */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId :is(div, section, article, main):not([aria-label="Message body"] *):not([role="button"]):not([role="button"] *):not([role="img"]):not([role="img"] *):not([role="status"]) {
+  background-color: var(--relay-bg-canvas) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Kill gradient / scroll-shadow overlays drawn with pseudo-elements on the pane wrappers */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [id="Skip to message-region"]::before,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [id="Skip to message-region"]::after,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId :is(div, section, article, main):not([aria-label="Message body"] *)::before,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId :is(div, section, article, main):not([aria-label="Message body"] *)::after {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Unify Reading Pane subject heading, thread cards, and message surfaces
+   so Outlook's warm #292929 cards blend seamlessly into Relay's canvas */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] [role="heading"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [data-app-section="ReadingPane"] [role="heading"] {
+  color: var(--relay-text-primary) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.015em !important;
+}
+
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId [role="region"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId [role="listitem"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] #ReadingPaneContainerId [role="document"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] [role="region"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] [role="listitem"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] [role="document"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Content pane"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Message body"] {
+  background-color: var(--relay-bg-canvas) !important;
+  color: var(--relay-text-primary) !important;
+  box-shadow: none !important;
+  border-color: var(--relay-border) !important;
+}
+
+/* Clean subject header bar inside #ReadingPaneContainerId */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [data-relay-surface="reading-header"] {
+  background-color: var(--relay-bg-canvas) !important;
+  border-bottom: 1px solid var(--relay-border) !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+/* Clean Reply / Reply All / Forward pill buttons in Reading Pane */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] button[aria-label="Reply"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] button[aria-label="Reply all"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] button[aria-label="Forward"] {
+  background-color: var(--relay-bg-elevated) !important;
+  color: var(--relay-text-secondary) !important;
+  border: 1px solid var(--relay-border) !important;
+  border-radius: 6px !important;
+}
+
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] button[aria-label="Reply"]:hover,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] button[aria-label="Reply all"]:hover,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Reading Pane"] button[aria-label="Forward"]:hover {
+  background-color: var(--relay-bg-hover) !important;
+  color: var(--relay-text-primary) !important;
+  border-color: var(--relay-border-strong) !important;
+}
+
+/* Preserve readable links inside dark-mode email bodies */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Message body"] a {
+  color: var(--relay-accent) !important;
+}
+
+/* Hide Outlook's bulky 3D envelope illustration on empty Reading Pane */
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [data-relay-empty-state="true"] svg,
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [data-relay-empty-state="true"] img {
+  display: none !important;
+}
+
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [data-relay-empty-state="true"]::after {
+  content: "J / K to navigate  ·  Enter to open  ·  C to compose  ·  Ctrl+K for commands";
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--relay-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Message body"] {
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+}
+
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label*="React" i][role="button"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] button[aria-label*="Like" i],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] button[aria-label*="Reactions" i],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label="Suggested replies"],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] [aria-label*="Suggested reply" i],
+html[data-relay-enabled="true"][data-relay-clean-reading="true"] button[aria-label="Apps"] {
+  display: none !important;
+}
+
+/* ---------- Notifications side panel (tagged by content.js) ---------- */
+html[data-relay-enabled="true"] [data-relay-np="pane"],
+html[data-relay-enabled="true"] [data-relay-np="surface"] {
+  background-color: var(--relay-bg-sidebar) !important;
+  background-image: none !important;
+  color: var(--relay-text-primary) !important;
+  box-shadow: none !important;
+}
+
+html[data-relay-enabled="true"] [data-relay-np="pane"] {
+  border-left: 1px solid var(--relay-border) !important;
+}
+
+html[data-relay-enabled="true"] [data-relay-np="card"] {
+  background-color: var(--relay-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--relay-border) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transition: background-color 90ms ease, border-color 90ms ease !important;
+}
+
+html[data-relay-enabled="true"] [data-relay-np="card"]:hover {
+  background-color: var(--relay-bg-hover) !important;
+  border-color: var(--relay-border-strong) !important;
+}
+
+/* A grey box nested inside a card is part of that card, not a second card */
+html[data-relay-enabled="true"] [data-relay-np="card"] [data-relay-np="card"] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+html[data-relay-enabled="true"] [data-relay-np="icon-btn"] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: var(--relay-text-secondary) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+html[data-relay-enabled="true"] [data-relay-np="icon-btn"]:hover {
+  background-color: var(--relay-bg-hover) !important;
+  color: var(--relay-text-primary) !important;
+}
+
+/* "Last seen" divider: muted label and hairline rules instead of brand blue */
+html[data-relay-enabled="true"] [data-relay-np="divider"],
+html[data-relay-enabled="true"] [data-relay-np="divider"] * {
+  color: var(--relay-text-muted) !important;
+  border-color: var(--relay-border) !important;
+}
+
+html[data-relay-enabled="true"] [data-relay-np="divider-line"],
+html[data-relay-enabled="true"] [data-relay-np="divider"]::before,
+html[data-relay-enabled="true"] [data-relay-np="divider"]::after {
+  background-color: var(--relay-border) !important;
+  background-image: none !important;
+}
+
+/* Header bell (and other header toggles) while their panel is open: no bright blue square */
+html[data-relay-enabled="true"] #O365_NavHeader :is(button, [role="button"]):is([aria-expanded="true"], [aria-pressed="true"]) {
+  background-color: var(--relay-bg-elevated) !important;
+  color: var(--relay-text-primary) !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+}
+
+/* Subtle Relay status badge in corner so user knows shortcut layer is live */
+html[data-relay-enabled="true"] #relay-floating-pill {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  z-index: 99990;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--relay-bg-elevated);
+  border: 1px solid var(--relay-border-strong);
+  color: var(--relay-text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.75;
+  transition: opacity 120ms ease, color 120ms ease;
+}
+
+html[data-relay-enabled="true"] #relay-floating-pill:hover {
+  opacity: 1;
+  color: var(--relay-text-primary);
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Facelift for Outlook</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="brand">
+        <span class="logo">F</span>
+        <div>
+          <div class="title">Facelift</div>
+          <div class="subtitle">Outlook Web Redesign</div>
+        </div>
+      </div>
+      <label class="switch" title="Turn the Facelift redesign on or off">
+        <input type="checkbox" id="enabled" />
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <main class="section">
+      <div class="row">
+        <span class="label">Theme</span>
+        <div class="segmented" role="group" aria-label="Theme">
+          <button type="button" data-theme="auto">Auto</button>
+          <button type="button" data-theme="dark">Dark</button>
+          <button type="button" data-theme="light">Light</button>
+        </div>
+      </div>
+
+      <div class="group-title">Clean UI</div>
+
+      <label class="row toggle-row">
+        <span class="label">Flat, clean reading pane</span>
+        <input type="checkbox" id="cleanReading" />
+      </label>
+
+      <label class="row toggle-row">
+        <span class="label">Clean message list (hover checkboxes)</span>
+        <input type="checkbox" id="compactList" />
+      </label>
+
+      <label class="row toggle-row">
+        <span class="label">Clean folder sidebar</span>
+        <input type="checkbox" id="cleanFolders" />
+      </label>
+
+      <label class="row toggle-row">
+        <span class="label">Focus mode (hide sidebar · <kbd>B</kbd>)</span>
+        <input type="checkbox" id="focusMode" />
+      </label>
+
+      <div class="group-title">Declutter</div>
+
+      <label class="row toggle-row">
+        <span class="label">Hide Copilot &amp; AI clutter</span>
+        <input type="checkbox" id="hideAi" />
+      </label>
+
+      <label class="row toggle-row">
+        <span class="label">Hide left app rail</span>
+        <input type="checkbox" id="hideRail" />
+      </label>
+
+      <label class="row toggle-row">
+        <span class="label">Minimal toolbar (trim ribbon)</span>
+        <input type="checkbox" id="hideRibbon" />
+      </label>
+
+      <label class="row toggle-row">
+        <span class="label">Keyboard shortcuts</span>
+        <input type="checkbox" id="shortcutsEnabled" />
+      </label>
+    </main>
+
+    <footer class="footer">
+      <span>Press <kbd>Ctrl+K</kbd> in Outlook for Command Palette</span>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Facelift for Outlook",
+  "version": "1.0.0",
+  "description": "Clean, minimalist, keyboard-first UI redesign for Outlook Web (outlook.office.com). Built for Zen Browser and Firefox. Zero AI clutter.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "relay-outlook-redesign@local",
+      "strict_min_version": "128.0"
+    }
+  },
+  "icons": {
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_title": "Facelift for Outlook",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "48": "icons/icon.svg"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://outlook.office.com/*",
+        "https://outlook.office365.com/*",
+        "https://outlook.cloud.microsoft/*",
+        "https://outlook.live.com/*"
+      ],
+      "css": [
+        "styles/redesign.css"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}
