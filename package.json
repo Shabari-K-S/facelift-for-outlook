@@ -1,0 +1,14 @@
+{
+  "name": "facelift-for-outlook",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Firefox / Zen extension that redesigns Outlook on the web.",
+  "scripts": {
+    "lint": "web-ext lint",
+    "build": "web-ext build --overwrite-dest",
+    "start": "web-ext run --start-url https://outlook.office.com/mail/"
+  },
+  "devDependencies": {
+    "web-ext": "^10.8.0"
+  }
+}

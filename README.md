@@ -1,42 +1,72 @@
-# Facelift for Outlook (Zen Browser & Firefox Extension)
+# Facelift for Outlook
 
-A 100% local, privacy-first browser extension that redesigns `outlook.office.com` (and `outlook.cloud.microsoft` / `outlook.office365.com` / `outlook.live.com`) with a clean, high-contrast Superhuman/Linear UI and keyboard-first shortcuts—**zero Entra ID registration, zero IT approval, zero external servers, zero AI clutter**.
+A Firefox and Zen Browser extension that gives Outlook on the web a clean, dark, keyboard-first interface. It hides Copilot, ribbon and toolbar clutter, flattens the reading pane, themes the notifications panel, and adds Superhuman-style shortcuts with a `Ctrl+K` command palette.
 
-## Install in Zen Browser (Takes 30 seconds)
+Everything runs locally in your browser. Facelift sends no data anywhere and needs no Entra ID app registration or IT approval, because it only restyles the Outlook page you are already signed in to.
 
-### Instant load (for testing right now)
-1. Open a new tab in **Zen Browser** and go to:
-   ```text
-   about:debugging#/runtime/this-firefox
-   ```
-2. Click **Load Temporary Add-on…**
-3. Navigate to `zen-outlook-extension/` and select `manifest.json`.
-4. Open `https://outlook.office.com` — the redesign and shortcuts activate immediately.
-5. Click the **Facelift** icon in your Zen toolbar to toggle the redesign, switch between **Dark / Light / Auto**, or show/hide the ribbon and left app rail.
+Works on `outlook.office.com`, `outlook.office365.com`, `outlook.cloud.microsoft` and `outlook.live.com`.
 
-### Keep it permanently across Zen Browser restarts
-Firefox/Zen removes temporary add-ons on restart unless installed as a signed `.xpi`:
-1. Zip the contents of `zen-outlook-extension/` (making sure `manifest.json` is at the root of the zip).
-2. Go to [addons.mozilla.org/developers](https://addons.mozilla.org/developers/) (free Mozilla account) → **Submit a New Add-on** → choose **On your own** (private/unlisted).
-3. Mozilla automatically signs it in ~1 minute and gives you a `.xpi` file.
-4. Drag and drop that `.xpi` file into Zen Browser to install it permanently.
+*Not affiliated with or endorsed by Microsoft.*
 
-*(Because it is strictly local and never leaves your browser, signing it as "On your own" keeps it completely private.)*
+## Install
 
-## Keyboard Shortcuts
+### From a signed `.xpi` (permanent)
+
+1. Download the signed `facelift_for_outlook-<version>.xpi`.
+2. Drag it into a Zen or Firefox window, or open `about:addons` → gear icon → **Install Add-on From File…**.
+3. Approve the access prompt for the Outlook sites.
+
+### Temporary, for development
+
+1. Open `about:debugging#/runtime/this-firefox`.
+2. Click **Load Temporary Add-on…** and select `manifest.json`.
+
+Temporary add-ons are removed when the browser restarts.
+
+## Usage
+
+Click the **Facelift** toolbar icon to turn the redesign on or off, pick **Auto / Dark / Light**, and toggle each cleanup (reading pane, message list, folder sidebar, focus mode, Copilot, app rail, minimal toolbar, shortcuts).
 
 | Key | Action |
 | --- | --- |
-| `J` / `K` | Move down / up in message list |
-| `Enter` | Open selected email |
+| `J` / `K` | Move down / up in the message list |
+| `Enter` | Open the selected email |
 | `C` | Compose new mail |
 | `R` | Reply |
 | `Shift+R` | Reply all |
 | `F` | Forward |
 | `E` | Archive |
-| `U` | Toggle Read / Unread |
-| `#` or `Delete` | Move to Trash |
-| `/` | Focus Outlook search bar |
-| `Ctrl+K` / `Cmd+K` | Open the Facelift command palette |
+| `U` | Toggle read / unread |
+| `#` or `Delete` | Move to Deleted Items |
+| `/` | Focus Outlook search |
+| `B` | Focus mode (hide the folder sidebar) |
+| `Ctrl+K` / `Cmd+K` | Open the command palette |
 | `?` | Show keyboard shortcuts |
-| `Esc` | Close palette / blur search |
+| `Esc` | Close the palette / leave search |
+
+## Development
+
+Requires Node.js 18+.
+
+```bash
+npm install
+npm run lint    # Mozilla's add-on linter (same checks AMO runs)
+npm run build   # creates web-ext-artifacts/facelift_for_outlook-<version>.zip
+npm start       # launches Firefox with the extension loaded
+```
+
+The build excludes dev files (`package.json`, `README.md`, `web-ext-config.mjs`); see [web-ext-config.mjs](./web-ext-config.mjs).
+
+## Publishing to addons.mozilla.org
+
+1. Bump `version` in [manifest.json](./manifest.json) (and [package.json](./package.json)) for every new upload.
+2. Run `npm run lint` and `npm run build`.
+3. Go to the [Developer Hub](https://addons.mozilla.org/developers/addon/submit/distribution) and choose:
+   - **On this site** to list it publicly on AMO (reviewed by Mozilla), or
+   - **On your own** for an unlisted, signed `.xpi` only you distribute (signed automatically, usually within minutes).
+4. Upload the `.zip` from `web-ext-artifacts/`.
+5. When asked whether the add-on uses minified or generated code, answer **No**. The source is uploaded as-is.
+
+### Privacy
+
+Facelift collects and transmits no data (`data_collection_permissions: none`). Its only permission is `storage`, used to save your popup preferences locally.

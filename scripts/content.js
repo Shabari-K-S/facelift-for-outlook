@@ -1010,34 +1010,35 @@
         )
       : commands;
 
+    const el = (tag, className, text) => {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      return node;
+    };
+
+    list.replaceChildren();
+
     if (paletteFiltered.length === 0) {
-      list.innerHTML = `<div class="empty">No matching commands.</div>`;
+      list.append(el("div", "empty", "No matching commands."));
       return;
     }
 
-    let html = "";
     let lastGroup = "";
     paletteFiltered.forEach((cmd, idx) => {
       if (cmd.group !== lastGroup) {
         lastGroup = cmd.group;
-        html += `<div class="group-label">${cmd.group}</div>`;
+        list.append(el("div", "group-label", cmd.group));
       }
-      html += `
-        <button type="button" class="item ${idx === paletteSelectedIndex ? "active" : ""}" data-idx="${idx}">
-          <span>${cmd.label}</span>
-          ${cmd.kbd ? `<kbd>${cmd.kbd}</kbd>` : ""}
-        </button>
-      `;
-    });
-
-    list.innerHTML = html;
-    list.querySelectorAll(".item").forEach((btn) => {
+      const btn = el("button", idx === paletteSelectedIndex ? "item active" : "item");
+      btn.type = "button";
+      btn.append(el("span", "", cmd.label));
+      if (cmd.kbd) btn.append(el("kbd", "", cmd.kbd));
       btn.addEventListener("click", () => {
-        const idx = Number(btn.getAttribute("data-idx"));
-        const cmd = paletteFiltered[idx];
         closeOverlays();
-        if (cmd) cmd.run();
+        cmd.run();
       });
+      list.append(btn);
     });
   }
 

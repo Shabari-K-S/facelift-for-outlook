@@ -2,11 +2,19 @@
   "manifest_version": 3,
   "name": "Facelift for Outlook",
   "version": "1.0.0",
-  "description": "Clean, minimalist, keyboard-first UI redesign for Outlook Web (outlook.office.com). Built for Zen Browser and Firefox. Zero AI clutter.",
+  "description": "A clean, dark, keyboard-first redesign for Outlook on the web. Hides clutter and adds J/K navigation and a Ctrl+K palette.",
+  "author": "Shabari K S",
+  "homepage_url": "https://github.com/Shabari-K-S/facelift-for-outlook",
   "browser_specific_settings": {
     "gecko": {
-      "id": "relay-outlook-redesign@local",
-      "strict_min_version": "128.0"
+      "id": "facelift-for-outlook@shabari-k-s",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
     }
   },
   "icons": {
